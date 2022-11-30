@@ -1,0 +1,19 @@
+---
+ - hosts: all
+   ignore_errors: yes
+   become: yes
+   tasks:
+    - name: upgrade all packages
+      yum:
+       name: '*'
+       state: latest
+      when: ansible_os_family == 'RedHat'
+   
+    - name: Update and upgrade apt packages
+      apt:
+        upgrade: yes
+        update_cache: yes
+      when: ansible_os_family == 'Debian'
+    
+    - name: Unconditionally reboot the machine with all defaults
+      ansible.builtin.reboot:
